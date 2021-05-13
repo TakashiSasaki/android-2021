@@ -15,4 +15,15 @@
         <item>キーマカレー</item>
         <item>グリーンカレー</item>
     </string-array>
+    <string-array name="lv_cocktaillist">
+        <item>ホワイトレディー</item>
+        <item>バラライカ</item>
+        <item>XYZ</item>
+        <item>ニューヨーク</item>
+        <item>マンハッタン</item>
+        <item>ミシシッピミュール</item>
+        <item>ブルーハワイ</item>
+        <item>マイタイ</item>
+        <item>マティーニ</item>
+    </string-array>
 </resources>
