@@ -96,4 +96,9 @@
         android:background="#ffdddd"
         android:entries="@array/lv_cocktaillist" />
 
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
