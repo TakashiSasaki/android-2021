@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         findViewById<ListView>(R.id.lvMenu)
-            .setOnItemClickListener(ListItemClickListener())
+            .onItemClickListener = ListItemClickListener()
     }
 
     private inner class ListItemClickListener :
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             val item = (p1 as TextView).text //toString()しなくてもいいみたい
 
             val show = "あなたが選んだ定食は " + item
-            Toast.makeText(getApplicationContext() ,show, Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext ,show, Toast.LENGTH_LONG).show()
             // 教科書ではアクティビティそのもの this@MainActivity を第一引数に渡していた
             // Java なら MainActivity.this と書いていたところ
         }
