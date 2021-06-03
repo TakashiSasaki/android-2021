@@ -1,6 +1,8 @@
 package jp.ac.kawahara.t_sasaki.listviewsample2
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,5 +27,19 @@ class MainActivity : AppCompatActivity() {
             menuList
         )
         lvMenu.adapter = adapter
-    }
-}
+        lvMenu.onItemClickListener = ListItemClickListener()
+    }//onCreate
+
+    private inner class ListItemClickListener
+        : AdapterView.OnItemClickListener {
+        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            OrderConfirmDialogFragment()
+                .show(
+                    supportFragmentManager,
+                    "OrderConfirmDialogFragment"
+                )
+        }//onItemClick
+    }//ListItemClickListener
+
+
+}//MainActivity
