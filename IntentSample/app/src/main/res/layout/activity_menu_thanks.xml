@@ -28,7 +28,7 @@
             android:id="@+id/tvMenuName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"></TextView>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tvMenuPrice"
@@ -42,6 +42,6 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/bt_thx_back"
-        />
+        android:onClick="onBackButtonClick"
+        android:text="@string/bt_thx_back" />
 </LinearLayout>

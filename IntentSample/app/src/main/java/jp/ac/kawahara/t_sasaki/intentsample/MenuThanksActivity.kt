@@ -16,6 +16,10 @@ class MenuThanksActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.tvMenuName).text = name
         findViewById<TextView>(R.id.tvMenuPrice).text = price
-    }
+    }//onCreate
+
+    fun onBackButtonClick(view: View){
+        finish()
+    }//onBackButtonClick
 
 }//MenuThanksActivity
