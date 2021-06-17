@@ -1,7 +1,10 @@
 package jp.ac.kawahara.t_sasaki.intentsample
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.TextView
@@ -43,6 +46,28 @@ class MainActivity : AppCompatActivity() {
         )
         adapter.viewBinder = CustomViewBinder()
 
-        findViewById<ListView>(R.id.lvMenu).adapter = adapter
+        val lv = findViewById<ListView>(R.id.lvMenu)
+        lv.adapter = adapter
+        lv.onItemClickListener = ListItemClickListener()
+
     }//onCreate
+
+    private inner class ListItemClickListener : AdapterView.OnItemClickListener{
+        override fun onItemClick
+                    (parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            val item = parent?.getItemAtPosition(position)
+                as MutableMap<String,String>
+            val name = item["name"]
+            val price = item["price"]
+
+            val intent = Intent(this@MainActivity,
+                                MenuThanksActivity::class.java)
+            intent.putExtra("menuName", name)
+            intent.putExtra("menuPrice", price)
+            startActivity(intent)
+        }//onItemClick
+    }//ListItemClickListener
+
+
+
 }//MainActivity
