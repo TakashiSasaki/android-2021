@@ -4,15 +4,26 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private inner class CustomViewBinder : SimpleAdapter.ViewBinder{
+    private inner class CustomViewBinder : SimpleAdapter.ViewBinder {
         override fun setViewValue(view: View?, data: Any?, textRepresentation: String?): Boolean {
+            when (view?.id) {
+                android.R.id.text1 -> {
+                    val tv = view as TextView
+                    tv.text = "🍽" + data as String
+                }
+                android.R.id.text2 -> {
+                    val tv = view as TextView
+                    tv.text = "😊" + data as String
+                }
+            }
             return true
-        }
-    }
+        }//setViewValue
+    }//CustomViewBinder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         val menuList: MutableList<MutableMap<String, String>> = mutableListOf()
         //val menuList2 = mutableListOf<MutableMap<String, String>>()
-
         menuList.add(mutableMapOf("name" to "からあげ定食", "price" to "800円"))
         menuList.add(mutableMapOf("name" to "ハンバーグ定食", "price" to "850円"))
 
