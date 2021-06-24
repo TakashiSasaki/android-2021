@@ -4,12 +4,11 @@
 
     <item
         android:id="@+id/menuListOptionTeishoku"
-        app:showAsAction="never"
-        android:title="@string/menu_list_options_teishoku" />
+        android:title="@string/menu_list_options_teishoku"
+        app:showAsAction="never" />
     <item
         android:id="@+id/menuListOptionCurry"
-        app:showAsAction="never"
-        android:title="@string/menu_list_options_curry" />
+        android:title="@string/menu_list_options_curry"
+        app:showAsAction="never" />
 
-    
 </menu>

@@ -3,6 +3,7 @@ package jp.ac.kawahara.t_sasaki.menusample
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
@@ -29,8 +30,8 @@ class MainActivity : AppCompatActivity() {
         lvMenu.onItemClickListener = ListItemClickListener()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        //super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_options_menu_list, menu)
         return true
     }//onCreateOptionsMenu
@@ -54,6 +55,25 @@ class MainActivity : AppCompatActivity() {
         return menuList
     }//createTeishokuList
 
+    private fun createCurryList(): MutableList<MutableMap<String, Any>> {
+        val menuList: MutableList<MutableMap<String, Any>> = mutableListOf()
+        menuList.add(
+            mutableMapOf(
+                "name" to "ビーフカレー",
+                "desc" to "特選スパイスを効かせた国産ビーフ100%のカレーです。",
+                "price" to 520
+            )
+        )
+        menuList.add(
+            mutableMapOf(
+                "name" to "ポークカレー",
+                "desc" to "特選スパイスを効かせた国産ポーク100%のカレーです。",
+                "price" to 420
+            )
+        )
+        return menuList
+    }//createCurryList
+
     private inner class ListItemClickListener : AdapterView.OnItemClickListener {
         override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             val item = parent?.getItemAtPosition(position)
@@ -73,5 +93,26 @@ class MainActivity : AppCompatActivity() {
         }//onItemClick
     }//ListItemClickListener
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var returnVal = true
+
+        when(item.itemId){
+            R.id.menuListOptionTeishoku->{
+                _menuList = createTeishokuList()
+            }
+            R.id.menuListOptionCurry->{
+                _menuList = createCurryList()
+            }
+            else ->{
+                returnVal = super.onOptionsItemSelected(item)
+            }
+        }//when
+
+        val lv = findViewById<ListView>(R.id.lvMenu)
+        val adapter = SimpleAdapter(this, _menuList, R.layout.row, _from, _to)
+        lv.adapter = adapter
+
+        return returnVal
+    }//onOptionsItemSelected
 
 }//MainActivity
