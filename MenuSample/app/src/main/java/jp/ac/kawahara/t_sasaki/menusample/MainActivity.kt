@@ -2,6 +2,7 @@ package jp.ac.kawahara.t_sasaki.menusample
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         )
         lvMenu.adapter = adapter
         lvMenu.onItemClickListener = ListItemClickListener()
+        registerForContextMenu(lvMenu)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -96,14 +98,14 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var returnVal = true
 
-        when(item.itemId){
-            R.id.menuListOptionTeishoku->{
+        when (item.itemId) {
+            R.id.menuListOptionTeishoku -> {
                 _menuList = createTeishokuList()
             }
-            R.id.menuListOptionCurry->{
+            R.id.menuListOptionCurry -> {
                 _menuList = createCurryList()
             }
-            else ->{
+            else -> {
                 returnVal = super.onOptionsItemSelected(item)
             }
         }//when
@@ -114,5 +116,15 @@ class MainActivity : AppCompatActivity() {
 
         return returnVal
     }//onOptionsItemSelected
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.menu_context_menu_list, menu)
+        menu.setHeaderTitle(R.string.menu_list_context_header)
+    }//onCreateContextMenu
 
 }//MainActivity
