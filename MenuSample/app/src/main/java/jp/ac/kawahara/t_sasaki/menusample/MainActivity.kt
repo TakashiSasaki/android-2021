@@ -2,6 +2,7 @@ package jp.ac.kawahara.t_sasaki.menusample
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
@@ -27,6 +28,12 @@ class MainActivity : AppCompatActivity() {
         lvMenu.adapter = adapter
         lvMenu.onItemClickListener = ListItemClickListener()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu_options_menu_list, menu)
+        return true
+    }//onCreateOptionsMenu
 
     private fun createTeishokuList(): MutableList<MutableMap<String, Any>> {
         val menuList: MutableList<MutableMap<String, Any>> = mutableListOf()
@@ -67,4 +74,4 @@ class MainActivity : AppCompatActivity() {
     }//ListItemClickListener
 
 
-}
+}//MainActivity
