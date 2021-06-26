@@ -36,3 +36,8 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+  fail:
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
+   
