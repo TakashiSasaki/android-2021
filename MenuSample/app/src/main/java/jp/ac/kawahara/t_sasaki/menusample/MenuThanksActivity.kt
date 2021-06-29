@@ -12,10 +12,10 @@ class MenuThanksActivity : AppCompatActivity() {
         setContentView(R.layout.activity_menu_thanks)
 
         val name = intent?.getStringExtra("menuName")
-        val price = intent?.getIntExtra("menuPrice", 0)
+        val price = intent?.getStringExtra("menuPrice")
 
         findViewById<TextView>(R.id.tvMenuName).text = name
-        findViewById<TextView>(R.id.tvMenuPrice).text = "" + price
+        findViewById<TextView>(R.id.tvMenuPrice).text = price
 
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

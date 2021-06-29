@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -120,10 +121,30 @@ class MainActivity : AppCompatActivity() {
         val menuName = menu["name"] as String
         val menuPrice = menu["price"] as Int
         val intent = Intent(this, MenuThanksActivity::class.java)
-                              //Java的には MenuThanksActivity.class
+        //Java的には MenuThanksActivity.class
         intent.putExtra("menuName", menuName)
         intent.putExtra("menuPrice", "${menuPrice}円")
         startActivity(intent)
     }//order
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+        val menu = _menuList[info.position]
+
+        when(item.itemId){
+            R.id.menuListContextDesc->{
+                val desc = menu["desc"] as String
+                Toast.makeText(this, desc, Toast.LENGTH_LONG).show()
+                return true
+            }
+            R.id.menuListContextOrder->{
+                order(menu)
+                return true
+            }
+            else ->{
+                return super.onContextItemSelected(item)
+            }
+        }//when
+    }//onContextItemSelected
 
 }//MainActivity
