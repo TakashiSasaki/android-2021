@@ -1,10 +1,12 @@
 package jp.ac.kawahara.t_sasaki.fragmentsample
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
+import android.widget.SimpleAdapter
+import androidx.fragment.app.Fragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,8 +36,20 @@ class MenuListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_menu_list, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_menu_list, container, false)
+        val lvMenu = view.findViewById<ListView>(R.id.lvMenu)
+        val menuList = mutableListOf<MutableMap<String, String>>()
+        menuList.add(mutableMapOf("name" to "からあげ定食", "price" to "800円"))
+        menuList.add(mutableMapOf("name" to "ハンバーグ定食", "price" to "850円"))
+
+        lvMenu.adapter = SimpleAdapter(
+            activity, menuList,
+            android.R.layout.simple_list_item_2,
+            arrayOf("name", "price"),
+            intArrayOf(android.R.id.text1, android.R.id.text2)
+        )
+        return view
+    }//onCreateView
 
     companion object {
         /**
