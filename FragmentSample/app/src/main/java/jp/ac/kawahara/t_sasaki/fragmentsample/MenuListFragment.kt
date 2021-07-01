@@ -23,13 +23,17 @@ class MenuListFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private var menuList = mutableListOf<MutableMap<String, String>>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-    }
+        menuList.add(mutableMapOf("name" to "からあげ定食", "price" to "800円"))
+        menuList.add(mutableMapOf("name" to "ハンバーグ定食", "price" to "850円"))
+    }//onCreate
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,9 +42,7 @@ class MenuListFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_menu_list, container, false)
         val lvMenu = view.findViewById<ListView>(R.id.lvMenu)
-        val menuList = mutableListOf<MutableMap<String, String>>()
-        menuList.add(mutableMapOf("name" to "からあげ定食", "price" to "800円"))
-        menuList.add(mutableMapOf("name" to "ハンバーグ定食", "price" to "850円"))
+        //val menuList = mutableListOf<MutableMap<String, String>>()
 
         lvMenu.adapter = SimpleAdapter(
             activity, menuList,
