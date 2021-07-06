@@ -49,7 +49,6 @@ class MenuThanksFragment : Fragment() {
         btBackButton.setOnClickListener({
             v -> activity?.finish()
         })
-
         return view
     }//onCreateView
 

@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <fragment
+        android:id="@+id/fragmentMenuThanks"
         android:name="jp.ac.kawahara.t_sasaki.fragmentsample.MenuThanksFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -1,9 +1,11 @@
 package jp.ac.kawahara.t_sasaki.fragmentsample
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import androidx.fragment.app.Fragment
@@ -50,6 +52,7 @@ class MenuListFragment : Fragment() {
             arrayOf("name", "price"),
             intArrayOf(android.R.id.text1, android.R.id.text2)
         )
+        lvMenu.onItemClickListener = ListItemClickListener()
         return view
     }//onCreateView
 
@@ -72,4 +75,18 @@ class MenuListFragment : Fragment() {
                 }
             }
     }
+
+    private inner class ListItemClickListener :
+        AdapterView.OnItemClickListener {
+        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            val item = parent?.getItemAtPosition(position)
+                    as MutableMap<String, String>
+            val name = item["name"]
+            val price = item["price"]
+            val intent = Intent(activity, MenuThanksActivity::class.java)
+            intent.putExtra("menuName", name)
+            intent.putExtra("menuPrice", price)
+            activity?.startActivity(intent)
+        }//onItemClick
+    }//OnItemClickListener
 }
