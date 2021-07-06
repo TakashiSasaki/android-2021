@@ -1,10 +1,12 @@
 package jp.ac.kawahara.t_sasaki.fragmentsample
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,8 +36,22 @@ class MenuThanksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_menu_thanks, container, false)
-    }
+        val intent = activity?.intent
+        val extras = intent?.extras
+        val menuName = extras?.getString("menuName")
+        val menuPrice = extras?.getString("menuPrice")
+
+        val view = inflater.inflate(R.layout.fragment_menu_thanks, container, false)
+        view.findViewById<TextView>(R.id.tvMenuName).text = menuName
+        view.findViewById<TextView>(R.id.tvMenuPrice).text = menuPrice
+
+        val btBackButton = view.findViewById<Button>(R.id.btBackButton)
+        btBackButton.setOnClickListener({
+            v -> activity?.finish()
+        })
+
+        return view
+    }//onCreateView
 
     companion object {
         /**
