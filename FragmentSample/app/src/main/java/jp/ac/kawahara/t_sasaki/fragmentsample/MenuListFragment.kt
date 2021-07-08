@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.FrameLayout
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import androidx.fragment.app.Fragment
@@ -26,6 +27,7 @@ class MenuListFragment : Fragment() {
     private var param2: String? = null
 
     private var menuList = mutableListOf<MutableMap<String, String>>()
+    private var _isLayoutXLarge = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +57,14 @@ class MenuListFragment : Fragment() {
         lvMenu.onItemClickListener = ListItemClickListener()
         return view
     }//onCreateView
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val frame = activity?.findViewById<FrameLayout>(R.id.menuThanksFrame)
+        if(frame == null){
+            _isLayoutXLarge = false
+        }
+    }//onActivityCreated
 
     companion object {
         /**

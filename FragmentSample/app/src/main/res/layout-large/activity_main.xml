@@ -19,6 +19,6 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="10dp"
         android:layout_weight="6"
-        android:background="#03A9F4" />
+        android:background="#CDDC39" />
 
 </LinearLayout>
