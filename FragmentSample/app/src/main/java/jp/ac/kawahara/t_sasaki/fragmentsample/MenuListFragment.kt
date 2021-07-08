@@ -93,10 +93,23 @@ class MenuListFragment : Fragment() {
                     as MutableMap<String, String>
             val name = item["name"]
             val price = item["price"]
-            val intent = Intent(activity, MenuThanksActivity::class.java)
-            intent.putExtra("menuName", name)
-            intent.putExtra("menuPrice", price)
-            activity?.startActivity(intent)
+            val b = Bundle()
+            b.putString("menuName", name)
+            b.putString("menuPrice", price)
+
+            if(_isLayoutXLarge) {
+                val f = MenuThanksFragment()
+                f.arguments = b
+                val t = fragmentManager?.beginTransaction()
+                t?.replace(R.id.menuThanksFrame, f)
+                t?.commit()
+            } else {
+                val intent = Intent(activity, MenuThanksActivity::class.java)
+                //intent.putExtra("menuName", name)
+                //intent.putExtra("menuPrice", price)
+                intent.putExtras(b)
+                activity?.startActivity(intent)
+            }
         }//onItemClick
     }//OnItemClickListener
 }
