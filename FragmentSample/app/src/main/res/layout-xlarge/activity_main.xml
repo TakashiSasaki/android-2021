@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    android:orientation="horizontal">
+
+    <fragment
+        android:id="@+id/fragmentMenuList"
+        android:name="jp.ac.kawahara.t_sasaki.fragmentsample.MenuListFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4">
+    </fragment>
+
+    <FrameLayout
+        android:id="@+id/menuThanksFrame"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="6"
+        android:background="?android:attr/detailsElementBackground" />
+
+</LinearLayout>
