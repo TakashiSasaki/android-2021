@@ -100,9 +100,9 @@ class MenuListFragment : Fragment() {
             if(_isLayoutXLarge) {
                 val fragment = MenuThanksFragment()
                 fragment.arguments = bundle
-                val transaction = fragmentManager?.beginTransaction()
-                transaction?.replace(R.id.menuThanksFrame, fragment)
-                transaction?.commit()
+                val transaction = parentFragmentManager.beginTransaction()
+                transaction.replace(R.id.menuThanksFrame, fragment)
+                transaction.commit()
             } else {
                 val intent = Intent(activity, MenuThanksActivity::class.java)
                 //intent.putExtra("menuName", name)

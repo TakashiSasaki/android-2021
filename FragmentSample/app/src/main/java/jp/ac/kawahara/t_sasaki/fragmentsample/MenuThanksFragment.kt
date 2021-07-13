@@ -62,9 +62,9 @@ class MenuThanksFragment : Fragment() {
         val btBackButton = view.findViewById<Button>(R.id.btBackButton)
         btBackButton.setOnClickListener(View.OnClickListener {
             if(_isLayoutXLarge){
-                val transaction = fragmentManager?.beginTransaction()
-                transaction?.remove(this)
-                transaction?.commit()
+                val transaction = parentFragmentManager.beginTransaction()
+                transaction.remove(this)
+                transaction.commit()
             } else {
                 activity?.finish()
             }
