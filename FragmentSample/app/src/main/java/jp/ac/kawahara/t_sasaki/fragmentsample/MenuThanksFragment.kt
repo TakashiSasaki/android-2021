@@ -9,8 +9,6 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -20,7 +18,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MenuThanksFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var _isLayoutXLarge = true
@@ -42,7 +39,7 @@ class MenuThanksFragment : Fragment() {
             _isLayoutXLarge = false
         }
 
-        var extras : Bundle?
+        val extras : Bundle?
 
         if(_isLayoutXLarge){
             extras = arguments
@@ -60,15 +57,15 @@ class MenuThanksFragment : Fragment() {
         view.findViewById<TextView>(R.id.tvMenuPrice).text = menuPrice
 
         val btBackButton = view.findViewById<Button>(R.id.btBackButton)
-        btBackButton.setOnClickListener(View.OnClickListener {
-            if(_isLayoutXLarge){
+        btBackButton.setOnClickListener {
+            if (_isLayoutXLarge) {
                 val transaction = parentFragmentManager.beginTransaction()
                 transaction.remove(this)
                 transaction.commit()
             } else {
                 activity?.finish()
             }
-        })
+        }
         return view
     }//onCreateView
 
@@ -81,7 +78,6 @@ class MenuThanksFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment MenuThanksFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             MenuThanksFragment().apply {
