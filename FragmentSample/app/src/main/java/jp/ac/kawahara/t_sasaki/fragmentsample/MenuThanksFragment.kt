@@ -60,8 +60,14 @@ class MenuThanksFragment : Fragment() {
         view.findViewById<TextView>(R.id.tvMenuPrice).text = menuPrice
 
         val btBackButton = view.findViewById<Button>(R.id.btBackButton)
-        btBackButton.setOnClickListener({
-            v -> activity?.finish()
+        btBackButton.setOnClickListener(View.OnClickListener {
+            if(_isLayoutXLarge){
+                val transaction = fragmentManager?.beginTransaction()
+                transaction?.remove(this)
+                transaction?.commit()
+            } else {
+                activity?.finish()
+            }
         })
         return view
     }//onCreateView
