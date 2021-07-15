@@ -7,14 +7,9 @@ import android.view.View
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        //Log.v("hoge", "fuga") // verbose
-        Log.i("MainActivity", "onCreate before super.onCreate") // informational
-        //Log.d("hoge", "fuga") // debug
-        //Log.w("hoge", "fuga") // warning
-        //Log.e("hoge", "fuga") // error
+        Log.i("MainActivity", "onCreate before super.onCreate")
         super.onCreate(savedInstanceState)
-        Log.i("MainActivity", "onCreate after super.onCreate") // informational
+        Log.i("MainActivity", "onCreate before after.onCreate")
         setContentView(R.layout.activity_main)
     }
-
 }
