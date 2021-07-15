@@ -35,19 +35,9 @@ class MenuThanksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val frame = activity?.findViewById<FrameLayout>(R.id.menuThanksFrame)
-        if(frame == null) {
-            _isLayoutXLarge = false
-        }
+        _isLayoutXLarge = if(frame == null) false else true
 
-        val extras : Bundle?
-
-        if(_isLayoutXLarge){
-            extras = arguments
-        } else {
-            // Inflate the layout for this fragment
-            val intent = activity?.intent
-            extras = intent?.extras
-        }//if
+        val extras = if(_isLayoutXLarge) arguments else activity?.intent?.extras
 
         val menuName = extras?.getString("menuName")
         val menuPrice = extras?.getString("menuPrice")
