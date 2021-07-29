@@ -1,5 +1,6 @@
 package jp.ac.kawahara.t_sasaki.databasesample
 
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -31,6 +32,22 @@ class MainActivity : AppCompatActivity() {
     }//onCreate
 
     fun onSaveButtonClick(v: View) {
+        val note = findViewById<EditText>(R.id.etNote).text.toString()
+        val db = _helper.writableDatabase
+
+        //既存のメモがあるかもしれないので削除
+        val deleteStatement = db.compileStatement("DELETE FROM cocktailmemos WHERE _id = ?")
+        deleteStatement.bindLong(1, _cocktailId.toLong())
+        deleteStatement.executeUpdateDelete()
+
+        //新規のメモを追加
+        val insertStatement = db.compileStatement(
+            "INSERT INTO cocktailmemos (_id, name, note) VALUES (?, ?, ?)")
+        insertStatement.bindLong(1, _cocktailId.toLong())
+        insertStatement.bindString(2, _cocktailName)
+        insertStatement.bindString(3, note)
+        insertStatement.executeInsert()
+
         findViewById<EditText>(R.id.etNote).setText("")
         findViewById<TextView>(R.id.tvCocktailName)
             .setText(R.string.tv_name)

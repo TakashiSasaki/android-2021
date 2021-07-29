@@ -14,8 +14,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
         val DATABASE_VERSION = 1
     }//companion object
 
+    // SQLiteのファイルが無い状態で getWritableDatabase もしくは
+    // getReadableDatabase が呼び出されたときにはじめて
+    // DatabaseHelper#onCreate が呼び出される
     override fun onCreate(db: SQLiteDatabase?) {
-        Log.v("DatabaseHJelper", "onCreate")
+        Log.v("DatabaseHelper", "onCreate")
         val sb = StringBuilder()
         sb.append("CREATE TABLE cocktailmemos (")
         sb.append("_id INTEGER PRIMARY KEY,")
