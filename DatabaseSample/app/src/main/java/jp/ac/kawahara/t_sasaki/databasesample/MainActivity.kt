@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
     var _cocktailId = -1
     var _cocktailName = ""
+    var _helper = DatabaseHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +31,12 @@ class MainActivity : AppCompatActivity() {
                 .setText(R.string.tv_name)
             findViewById<Button>(R.id.btnSave).isEnabled = false
         }//onSaveButtonClick
+
     }//onCreate
 
+    override fun onDestroy(){
+        _helper.close()
+        super.onDestroy()
+    }
 
 }//MainActivity
