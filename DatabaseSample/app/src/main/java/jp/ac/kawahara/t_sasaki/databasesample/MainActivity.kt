@@ -25,9 +25,18 @@ class MainActivity : AppCompatActivity() {
                     .text = _cocktailName
                 findViewById<Button>(R.id.btnSave)
                     .isEnabled = true
-            }
 
-
+                //選択したカクテルのメモを呼び出す
+                val db = _helper.writableDatabase
+                val sql = "SELECT * FROM cocktailmemos WHERE _id = ${_cocktailId}"
+                val cursor = db.rawQuery(sql, null)
+                var note = ""
+                while(cursor.moveToNext()){
+                    val idxNote = cursor.getColumnIndex("note")
+                    note = cursor.getString(idxNote)
+                }//while
+                findViewById<EditText>(R.id.etNote).setText(note)
+            }//AdapterView.OnItemClickListener
 
     }//onCreate
 
