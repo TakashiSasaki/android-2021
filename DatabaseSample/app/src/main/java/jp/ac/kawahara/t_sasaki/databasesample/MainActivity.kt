@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                     .isEnabled = true
 
                 //選択したカクテルのメモを呼び出す
-                val db = _helper.writableDatabase
+                val db = _helper.readableDatabase
                 val sql = "SELECT * FROM cocktailmemos WHERE _id = ${_cocktailId}"
                 val cursor = db.rawQuery(sql, null)
                 var note = ""
