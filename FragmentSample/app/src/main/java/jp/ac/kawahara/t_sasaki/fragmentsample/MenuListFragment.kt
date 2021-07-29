@@ -1,7 +1,9 @@
 package jp.ac.kawahara.t_sasaki.fragmentsample
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +29,7 @@ class MenuListFragment : Fragment() {
     private var _isLayoutXLarge = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i("MenuListFragment", "onCreate")
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -40,6 +43,7 @@ class MenuListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i("MenuListFragment", "onCreateView")
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_menu_list, container, false)
         val lvMenu = view.findViewById<ListView>(R.id.lvMenu)
@@ -56,6 +60,7 @@ class MenuListFragment : Fragment() {
     }//onCreateView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.i("MenuListFragment", "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         val frame = activity?.findViewById<FrameLayout>(R.id.menuThanksFrame)
         if(frame == null){
@@ -108,4 +113,59 @@ class MenuListFragment : Fragment() {
             }
         }//onItemClick
     }//OnItemClickListener
+
+    override fun onAttach(context: Context) {
+        Log.i("MenuListFragment", "onAttach")
+        super.onAttach(context)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        Log.i("MenuListFragment", "onActivityCreated")
+        super.onActivityCreated(savedInstanceState)
+    }
+
+    override fun onStart() {
+        Log.i("MenuListFragment", "onStart")
+        super.onStart()
+    }
+
+    override fun onResume() {
+        Log.i("MenuListFragment", "onResume")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Log.i("MenuListFragment", "onPause")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        Log.i("MenuListFragment", "onStop")
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        Log.i("MenuListFragment", "onDestroyView")
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        Log.i("MenuListFragment", "onDestroy")
+        super.onDestroy()
+    }
+
+    override fun onDetach() {
+        Log.i("MenuListFragment", "onDetach")
+        super.onDetach()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        Log.i("MenuListFragment", "onSaveInstanceState")
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        Log.i("MenuListFragment", "onViewStateRestored")
+        super.onViewStateRestored(savedInstanceState)
+    }
 }
