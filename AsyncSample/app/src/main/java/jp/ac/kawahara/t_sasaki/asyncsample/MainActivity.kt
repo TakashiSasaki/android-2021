@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
                 val item = _list.get(position)
                 val q = item.get("q")
                 q?.let {
+                    Log.v(DEBUG_TAG, "it = $it")
                     val urlFull = "$WEATHERINFO_URL&q=$q&appid=$APP_ID"
                     receiveWeatherInfo(urlFull)
                 }//let q
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     }//onCreate
 
     private fun receiveWeatherInfo(urlFull: String) {
-        Log.v(DEBUG_TAG, "receiveWeatherInfo")
+        Log.v(DEBUG_TAG, "urlFull = $urlFull")
     }//receiveWeatherInfo
 
     var _list: MutableList<MutableMap<String, String>> = mutableListOf()
