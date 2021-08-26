@@ -1,6 +1,9 @@
 package jp.ac.kawahara.t_sasaki.asyncsample
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -21,20 +24,35 @@ class MainActivity : AppCompatActivity() {
         _list = createList()
 
         val lv = findViewById<ListView>(R.id.lvCityList)
-        lv.adapter = SimpleAdapter(this, _list,
+        lv.adapter = SimpleAdapter(
+            this, _list,
             android.R.layout.simple_list_item_1,
             arrayOf("name"),
-            intArrayOf(android.R.id.text1))
-        
+            intArrayOf(android.R.id.text1)
+        )
+
+        lv.onItemClickListener =
+            AdapterView.OnItemClickListener { adapterView: AdapterView<*>, view1: View, position: Int, l: Long ->
+                val item = _list.get(position)
+                val q = item.get("q")
+                q?.let {
+                    val urlFull = "$WEATHERINFO_URL&q=$q&appid=$APP_ID"
+                    receiveWeatherInfo(urlFull)
+                }//let q
+            }//onItemClickListener
     }//onCreate
+
+    private fun receiveWeatherInfo(urlFull: String) {
+        Log.v(DEBUG_TAG, "receiveWeatherInfo")
+    }//receiveWeatherInfo
 
     var _list: MutableList<MutableMap<String, String>> = mutableListOf()
 
-    private fun createList(): MutableList<MutableMap<String, String>>{
+    private fun createList(): MutableList<MutableMap<String, String>> {
         var list = mutableListOf<MutableMap<String, String>>()
         list.add(mutableMapOf("name" to "大阪", "q" to "Osaka"))
         list.add(mutableMapOf("name" to "神戸", "q" to "Kobe"))
         list.add(mutableMapOf("name" to "松山", "q" to "Matsuyama"))
         return list
-    }
-}
+    }//createList
+}//MainActivity
