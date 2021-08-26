@@ -11,7 +11,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 
     companion object {
         val DATABASE_NAME = "cocktailmemo.db"
-        val DATABASE_VERSION = 1
+        val DATABASE_VERSION = 3
     }//companion object
 
     // SQLiteのファイルが無い状態で getWritableDatabase もしくは
@@ -31,5 +31,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         Log.v("DatabaseHJelper", "onUpgrade")
+
+        //if(oldVersion == 1 && newVersion == 2){
+            //ここにversion1 のDBからversion 2のDBへのAlter文を実行するコードを書く。
+        //}
+        if(oldVersion == 1 && newVersion == 3){
+            //ここにversion1 のDBからversion 3のDBへのAlter文を実行するコードを書く。
+        }
+        if(oldVersion == 2 && newVersion == 3){
+            //ここにversion1 のDBからversion 2のDBへのAlter文を実行するコードを書く。
+        }
     }//onUpgrade
 }//DatabaseHelper
