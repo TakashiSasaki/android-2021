@@ -2,6 +2,7 @@ package jp.ac.kawahara.t_sasaki.multithreadsample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import kotlin.concurrent.thread
 
@@ -22,24 +23,32 @@ class MainActivity : AppCompatActivity() {
     // 小規模のアプリを作って動作を確かめてみる。
 
     private fun funA(){
-        (1..100).forEach {
-            print("A$it ")
-        }
-    }
+        (1..10000).forEach {
+            Log.v("funA", "A$it ")
+        }//forEach
+    }//funA
 
     private fun funB(){
-        (1..100).forEach {
-            print("B$it ")
-        }
-    }
+        (1..10000).forEach {
+            Log.v("funB","B$it ")
+        }//forEach
+    }//funB
 
     public fun onButtonClick(v: View){
+        Log.v("onButtonClick", "start")
         //ボタンを押すとこの関数がUIスレッドで実行される
         thread {
             funA()
         }
+        // JavaScriptでは setTimeout(funA,0) でノンブロッキングにできる
+        //しかしJSはシングルスレッドなので並列実行にはならない。
+
         thread {
             funB()
         }
-    }
-}
+        // JavaScriptでは setTimeout(funB, 0) でノンブロッキングにできる
+        // しかしJSはシングルスレッドなので並列実行にはならない
+
+        Log.v("onButtonClick", "end")
+    }//onButtonClick
+}//MainActivity
