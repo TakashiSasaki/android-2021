@@ -1,12 +1,23 @@
 package jp.ac.kawahara.t_sasaki.asyncsample
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.lang.StringBuilder
+import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,4 +67,56 @@ class MainActivity : AppCompatActivity() {
         list.add(mutableMapOf("name" to "松山", "q" to "Matsuyama"))
         return list
     }//createList
+
+    private inner class
+    WeatherInfoBackgroundReceiver(url : String) : Runnable{
+        private val _url = url
+
+        override fun run() {
+            // url をもとにOpenWeatherMapからJSONをGETする
+            var result = ""
+            val con = URL(_url).openConnection() as? HttpURLConnection
+            con?.let{
+                try{
+                    it.connectTimeout = 1000
+                    it.readTimeout = 1000
+                    it.requestMethod = "GET"
+                    it.connect()
+                    result = is2String(it.inputStream)
+                    it.inputStream.close()
+                } catch(ex :SocketTimeoutException){
+                    Log.w(DEBUG_TAG, "通信タイムアウト", ex)
+                }//try
+            }//let
+
+            Handler(Looper.getMainLooper())
+                .post(WeatherInfoPostExecutor())
+        }
+    }
+
+    private fun is2String(bs: InputStream): String {
+        val sb = StringBuilder()
+
+        //InputStreamReaderはChar（UTF-16）の列として読みだすためのもの
+        //sr.read(cbuf : CharArray!)
+        val sr = InputStreamReader(bs, "UTF-8")
+        //BufferdReaderは行単位で読みだすためのもの
+        val br = BufferedReader(sr)
+        var line = br.readLine()
+        while(line != null){
+            sb.append(line)
+            line = br.readLine()
+        }//while
+        return sb.toString()
+    }//is2String
+
+    private inner class
+    WeatherInfoPostExecutor(): Runnable{
+        override fun run(){
+            // JSONをもとにUIを更新する
+        }
+    }
+
+
+
 }//MainActivity
