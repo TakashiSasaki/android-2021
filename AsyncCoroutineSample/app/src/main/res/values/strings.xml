@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">AsyncCoroutineSample</string>
+    <string name="app_name">お天気情報 コルーチン版</string>
+    <string name="tv_winfo_title">お天気詳細</string>
 </resources>
