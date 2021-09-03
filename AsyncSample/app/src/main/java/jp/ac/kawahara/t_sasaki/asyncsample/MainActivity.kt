@@ -9,16 +9,17 @@ import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.TextView
+import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
 import java.util.concurrent.Executors
+import androidx.annotation.WorkerThread as WorkerThread
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,9 +56,10 @@ class MainActivity : AppCompatActivity() {
             }//onItemClickListener
     }//onCreate
 
+    @UiThread
     private fun receiveWeatherInfo(urlFull: String) {
-        val executorService = Executors.newSingleThreadExecutor()
-        executorService.submit(WeatherInfoBackgroundReceiver(urlFull))
+        Executors.newSingleThreadExecutor()
+            .submit(WeatherInfoBackgroundReceiver(urlFull))
         Log.v(DEBUG_TAG, "urlFull = $urlFull")
     }//receiveWeatherInfo
 
@@ -72,24 +74,27 @@ class MainActivity : AppCompatActivity() {
     }//createList
 
     private inner class
-    WeatherInfoBackgroundReceiver(url : String) : Runnable{
+    WeatherInfoBackgroundReceiver(url: String) : Runnable {
+        // 教科書ではコンストラクタでHandlerオブジェクトを受け取っているが
+        // UIスレッドのHandlerはHandler(Looper.getMainLooper()) で生成できるので不要
         private val _url = url
 
+        @WorkerThread
         override fun run() {
             // url をもとにOpenWeatherMapからJSONをGETする
             var result = ""
             val con = URL(_url).openConnection() as? HttpURLConnection
-            con?.let{
-                try{
+            con?.let {
+                try {
                     it.connectTimeout = 1000
                     it.readTimeout = 1000
                     it.requestMethod = "GET"
                     it.connect()
                     Log.v(DEBUG_TAG, "responseCode = ${it.responseCode}")
-                    result= is2String(it.inputStream)
+                    result = is2String(it.inputStream)
                     //resultはJSON文字列であることが期待される。
                     it.inputStream.close()
-                } catch(ex :SocketTimeoutException){
+                } catch (ex: SocketTimeoutException) {
                     Log.w(DEBUG_TAG, "通信タイムアウト", ex)
                 }//try
             }//let
@@ -109,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         //BufferedReaderは行単位で読みだすためのもの
         val br = BufferedReader(sr)
         var line = br.readLine()
-        while(line != null){
+        while (line != null) {
             sb.append(line)
             line = br.readLine()
         }//while
@@ -118,10 +123,12 @@ class MainActivity : AppCompatActivity() {
 
     // WeatherInfoPostExecutorはUIスレッドで実行されるつもり
     private inner class
-    WeatherInfoPostExecutor(result:String): Runnable{
+    WeatherInfoPostExecutor(result: String) : Runnable {
         //result は JSON 文字列であることが期待される
         private val _result = result
-        override fun run(){
+
+        @UiThread
+        override fun run() {
             // JSONをパースしてその内容をもとににUIを更新する
             // result は JSON文字列のつもり
             val root = JSONObject(_result)
