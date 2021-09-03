@@ -1,0 +1,2 @@
+rootProject.name = "AsyncCoroutineSample"
+include ':app'
