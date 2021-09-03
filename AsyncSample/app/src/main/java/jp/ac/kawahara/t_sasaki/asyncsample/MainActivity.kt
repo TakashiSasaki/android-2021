@@ -56,8 +56,8 @@ class MainActivity : AppCompatActivity() {
     }//onCreate
 
     private fun receiveWeatherInfo(urlFull: String) {
-        val executor = Executors.newSingleThreadExecutor()
-        executor.submit(WeatherInfoBackgroundReceiver(urlFull))
+        val executorService = Executors.newSingleThreadExecutor()
+        executorService.submit(WeatherInfoBackgroundReceiver(urlFull))
         Log.v(DEBUG_TAG, "urlFull = $urlFull")
     }//receiveWeatherInfo
 
@@ -94,6 +94,7 @@ class MainActivity : AppCompatActivity() {
                 }//try
             }//let
 
+            //Handler(this@MainActivity.mainLooper)
             Handler(Looper.getMainLooper())
                 .post(WeatherInfoPostExecutor(result))
         }
