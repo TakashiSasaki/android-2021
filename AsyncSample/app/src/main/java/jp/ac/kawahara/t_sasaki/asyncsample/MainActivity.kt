@@ -8,8 +8,9 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
-import androidx.annotation.WorkerThread
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -17,7 +18,7 @@ import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
-import javax.net.ssl.HttpsURLConnection
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,13 +56,15 @@ class MainActivity : AppCompatActivity() {
     }//onCreate
 
     private fun receiveWeatherInfo(urlFull: String) {
+        val executor = Executors.newSingleThreadExecutor()
+        executor.submit(WeatherInfoBackgroundReceiver(urlFull))
         Log.v(DEBUG_TAG, "urlFull = $urlFull")
     }//receiveWeatherInfo
 
     var _list: MutableList<MutableMap<String, String>> = mutableListOf()
 
     private fun createList(): MutableList<MutableMap<String, String>> {
-        var list = mutableListOf<MutableMap<String, String>>()
+        val list = mutableListOf<MutableMap<String, String>>()
         list.add(mutableMapOf("name" to "大阪", "q" to "Osaka"))
         list.add(mutableMapOf("name" to "神戸", "q" to "Kobe"))
         list.add(mutableMapOf("name" to "松山", "q" to "Matsuyama"))
@@ -82,7 +85,9 @@ class MainActivity : AppCompatActivity() {
                     it.readTimeout = 1000
                     it.requestMethod = "GET"
                     it.connect()
-                    result = is2String(it.inputStream)
+                    Log.v(DEBUG_TAG, "responseCode = ${it.responseCode}")
+                    result= is2String(it.inputStream)
+                    //resultはJSON文字列であることが期待される。
                     it.inputStream.close()
                 } catch(ex :SocketTimeoutException){
                     Log.w(DEBUG_TAG, "通信タイムアウト", ex)
@@ -90,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             }//let
 
             Handler(Looper.getMainLooper())
-                .post(WeatherInfoPostExecutor())
+                .post(WeatherInfoPostExecutor(result))
         }
     }
 
@@ -100,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         //InputStreamReaderはChar（UTF-16）の列として読みだすためのもの
         //sr.read(cbuf : CharArray!)
         val sr = InputStreamReader(bs, "UTF-8")
-        //BufferdReaderは行単位で読みだすためのもの
+        //BufferedReaderは行単位で読みだすためのもの
         val br = BufferedReader(sr)
         var line = br.readLine()
         while(line != null){
@@ -110,13 +115,29 @@ class MainActivity : AppCompatActivity() {
         return sb.toString()
     }//is2String
 
+    // WeatherInfoPostExecutorはUIスレッドで実行されるつもり
     private inner class
-    WeatherInfoPostExecutor(): Runnable{
+    WeatherInfoPostExecutor(result:String): Runnable{
+        //result は JSON 文字列であることが期待される
+        private val _result = result
         override fun run(){
-            // JSONをもとにUIを更新する
-        }
-    }
+            // JSONをパースしてその内容をもとににUIを更新する
+            // result は JSON文字列のつもり
+            val root = JSONObject(_result)
+            val weather = root
+                .getJSONArray("weather")
+                .getJSONObject(0)
+                .getString("description")
+            val longitude = root.getJSONObject("coord").getString("lon")
+            val latitude = root.getJSONObject("coord").getString("lat")
+            val cityName = root.getString("name")
 
+            val telop = "${cityName}の天気"
+            val desc = "現在は${weather}です。\n緯度は${latitude}度で経度は${longitude}度です。"
 
+            findViewById<TextView>(R.id.tvWeatherTelop).text = telop
+            findViewById<TextView>(R.id.tvWeatherDesc).text = desc
+        }//run
+    }//WeatherInfoPostExecutor
 
 }//MainActivity
