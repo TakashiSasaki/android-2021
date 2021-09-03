@@ -6,8 +6,17 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import android.widget.TextView
 import androidx.annotation.UiThread
+import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
+import java.net.URL
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -53,7 +62,67 @@ class MainActivity : AppCompatActivity() {
         return list
     }//createList
 
+    private fun is2String(bs: InputStream): String {
+        val sb = StringBuilder()
+
+        //InputStreamReaderはChar（UTF-16）の列として読みだすためのもの
+        //sr.read(cbuf : CharArray!)
+        val sr = InputStreamReader(bs, "UTF-8")
+        //BufferedReaderは行単位で読みだすためのもの
+        val br = BufferedReader(sr)
+        var line = br.readLine()
+        while (line != null) {
+            sb.append(line)
+            line = br.readLine()
+        }//while
+        return sb.toString()
+    }//is2String
+
     @UiThread
     private fun receiveWeatherInfo(urlFull: String) {
     }
+
+    @WorkerThread
+    private fun weatherInfoBackgroundRunner(url: String): String {
+        // url をもとにOpenWeatherMapからJSONをGETする
+        var result = ""
+        val con = URL(url).openConnection() as? HttpURLConnection
+        con?.let {
+            try {
+                it.connectTimeout = 1000
+                it.readTimeout = 1000
+                it.requestMethod = "GET"
+                it.connect()
+                Log.v(DEBUG_TAG, "responseCode = ${it.responseCode}")
+                result = is2String(it.inputStream)
+                //resultはJSON文字列であることが期待される。
+                it.inputStream.close()
+            } catch (ex: SocketTimeoutException) {
+                Log.w(DEBUG_TAG, "通信タイムアウト", ex)
+            }//try
+        }//let
+        return result
+    }//weatherInfoBackgroundRunner
+
+    @UiThread
+    private fun weatherInfoPostRunner(result: String) {
+        // JSONをパースしてその内容をもとににUIを更新する
+        // result は JSON文字列のつもり
+        val root = JSONObject(result)
+        val weather = root
+            .getJSONArray("weather")
+            .getJSONObject(0)
+            .getString("description")
+        val longitude = root.getJSONObject("coord").getString("lon")
+        val latitude = root.getJSONObject("coord").getString("lat")
+        val cityName = root.getString("name")
+
+        val telop = "${cityName}の天気"
+        val desc = "現在は${weather}です。\n緯度は${latitude}度で経度は${longitude}度です。"
+
+        findViewById<TextView>(R.id.tvWeatherTelop).text = telop
+        findViewById<TextView>(R.id.tvWeatherDesc).text = desc
+    }
+
+
 }
