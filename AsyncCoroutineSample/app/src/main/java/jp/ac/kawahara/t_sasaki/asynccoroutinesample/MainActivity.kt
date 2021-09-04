@@ -10,6 +10,10 @@ import android.widget.TextView
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -80,29 +84,34 @@ class MainActivity : AppCompatActivity() {
 
     @UiThread
     private fun receiveWeatherInfo(urlFull: String) {
-    }
+        lifecycleScope.launch {
+            val result = weatherInfoBackgroundRunner(urlFull)
+            weatherInfoPostRunner(result)
+        }//launch
+    }//receiveWeatherInfo
 
     @WorkerThread
-    private fun weatherInfoBackgroundRunner(url: String): String {
-        // url をもとにOpenWeatherMapからJSONをGETする
-        var result = ""
-        val con = URL(url).openConnection() as? HttpURLConnection
-        con?.let {
-            try {
-                it.connectTimeout = 1000
-                it.readTimeout = 1000
-                it.requestMethod = "GET"
-                it.connect()
-                Log.v(DEBUG_TAG, "responseCode = ${it.responseCode}")
-                result = is2String(it.inputStream)
-                //resultはJSON文字列であることが期待される。
-                it.inputStream.close()
-            } catch (ex: SocketTimeoutException) {
-                Log.w(DEBUG_TAG, "通信タイムアウト", ex)
-            }//try
-        }//let
-        return result
-    }//weatherInfoBackgroundRunner
+    private suspend fun weatherInfoBackgroundRunner(url: String): String =
+        withContext(Dispatchers.IO) {
+            // url をもとにOpenWeatherMapからJSONをGETする
+            var result = ""
+            val con = URL(url).openConnection() as? HttpURLConnection
+            con?.let {
+                try {
+                    it.connectTimeout = 1000
+                    it.readTimeout = 1000
+                    it.requestMethod = "GET"
+                    it.connect()
+                    Log.v(DEBUG_TAG, "responseCode = ${it.responseCode}")
+                    result = is2String(it.inputStream)
+                    //resultはJSON文字列であることが期待される。
+                    it.inputStream.close()
+                } catch (ex: SocketTimeoutException) {
+                    Log.w(DEBUG_TAG, "通信タイムアウト", ex)
+                }//try
+            }//let
+            result
+        }//weatherInfoBackgroundRunner
 
     @UiThread
     private fun weatherInfoPostRunner(result: String) {
@@ -123,6 +132,4 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvWeatherTelop).text = telop
         findViewById<TextView>(R.id.tvWeatherDesc).text = desc
     }
-
-
 }
